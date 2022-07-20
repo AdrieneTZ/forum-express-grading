@@ -3,7 +3,10 @@ const restaurantServices = require('../../services/restaurant-services')
 
 const restaurantController = {
   getRestaurants: (req, res, next) => {
-    restaurantServices.getRestaurants(req, (error, data) => (error ? next(error) : res.render('restaurants', data)))
+    const getRestaurantsRenderData = (error, renderData) =>
+      error ? next(error) : res.render('restaurants', renderData)
+
+    restaurantServices.getRestaurants(req, getRestaurantsRenderData)
   },
   getRestaurant: async (req, res, next) => {
     try {

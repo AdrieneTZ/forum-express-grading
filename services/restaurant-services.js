@@ -2,7 +2,7 @@ const { Restaurant, Category } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restaurantServices = {
-  getRestaurants: async (req, cb) => {
+  getRestaurants: async (req, callbackFn) => {
     try {
       ////// Pagination
       // 9 data pre page
@@ -69,14 +69,14 @@ const restaurantServices = {
         isLiked: likedRestaurantsIds.includes(restaurant.id),
       }))
 
-      return cb(null, {
+      return callbackFn(null, {
         restaurants: data,
         categories,
         categoryId,
         pagination: getPagination(limit, page, restaurants.count),
       })
     } catch (error) {
-      cb(error)
+      callbackFn(error)
     }
   },
 }
