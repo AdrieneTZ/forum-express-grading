@@ -15,6 +15,35 @@ const adminServices = {
       callbackFn(error)
     }
   },
+  postRestaurant: async (req, callbackFn) => {
+    try {
+      const { name, tel, address, openingHours, description, categoryId } = req.body
+
+      // make sure restaurant name is not null
+      if (!name) throw new Error('Restaurant name is required field!')
+
+      // take out image file
+      const { file } = req
+
+      // pass image file to middleware: file-helpers
+      // create this restaurant
+      const filePath = await imgurFileHandler(file)
+      const newRestaurant = await Restaurant.create({
+        name,
+        tel,
+        address,
+        openingHours,
+        description,
+        image: filePath || null,
+        categoryId,
+      })
+
+      // after creating a new data, backend has to return data to frontend
+      return callbackFn(null, { restaurant: newRestaurant })
+    } catch (error) {
+      callbackFn(error)
+    }
+  },
   deleteRestaurant: async (req, callbackFn) => {
     try {
       // 1. find by primary key: id

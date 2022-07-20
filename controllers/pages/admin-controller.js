@@ -45,33 +45,13 @@ const adminController = {
     }
   },
   postRestaurant: async (req, res, next) => {
-    try {
-      const { name, tel, address, openingHours, description, categoryId } = req.body
-
-      // make sure restaurant name is not null
-      if (!name) throw new Error('Restaurant name is required field!')
-
-      // take out image file
-      const { file } = req
-
-      // pass image file to middleware: file-helpers
-      // create this restaurant
-      const filePath = await imgurFileHandler(file)
-      await Restaurant.create({
-        name,
-        tel,
-        address,
-        openingHours,
-        description,
-        image: filePath || null,
-        categoryId,
-      })
+    const newRestaurantRenderData = (error, renderData) => {
+      if (error) return next(error)
 
       req.flash('success_messages', 'You have created restaurant successfully!')
-      return res.redirect('/admin/restaurants')
-    } catch (error) {
-      next(error)
+      res.redirect('/admin/restaurants', renderData)
     }
+    adminServices.postRestaurant(req, newRestaurantRenderData)
   },
   getRestaurant: (req, res, next) => {
     Restaurant.findByPk(req.params.id, {

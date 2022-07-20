@@ -5,6 +5,10 @@ const adminController = {
     const getRestaurantsApiData = (error, apiData) => (error ? next(error) : res.json({ status: 'success', apiData }))
     adminServices.getRestaurants(req, getRestaurantsApiData)
   },
+  postRestaurant: (req, res, next) => {
+    const newRestaurantApiData = (error, apiData) => (error ? next(error) : res.json({ status: 'success', apiData }))
+    adminServices.postRestaurant(req, newRestaurantApiData)
+  },
   deleteRestaurant: (req, res, next) => {
     const deletedRestaurantsApiData = (error, apiData) =>
       error ? next(error) : res.json({ status: 'success', apiData })
