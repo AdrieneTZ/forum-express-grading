@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const path = require('path')
 const express = require('express')
 const handlebars = require('express-handlebars')
@@ -11,21 +15,16 @@ const { getUser } = require('./helpers/auth-helpers')
 
 const { pages, apis } = require('./routes')
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-}
-
 const app = express()
 const port = process.env.PORT || 3000
 const SESSION_SECRET = 'top_secret'
-
-const db = require('./models')
 
 app.engine('hbs', handlebars({ extname: '.hbs', helpers: handlebarsHelpers }))
 app.set('view engine', 'hbs')
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+
 app.use(session({ secret: SESSION_SECRET, resave: false, saveUninitialized: false }))
 app.use(passport.initialize()) // init passport
 app.use(passport.session()) // turn on session function
